@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 //TODO: setup up material theming
+//TODO: change the TextField to TextFormField and setup validation
 //TODD: find a better way to populate user registration fields
 //TODO: setup multilingual support
 //TODO: setup cognito user auth

@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_everywhere_project/Widgets/orSeperator.dart';
 
 import '../Widgets/cardInput.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,29 +35,37 @@ class SEHomePage extends StatelessWidget {
             child: Text(
               'Join as Guest',
               style: GoogleFonts.poppins(
-                textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                textStyle:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
             ),
           ),
-        ),
+        ), //Join as Guest Text
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-            Text('or ',
+            Text(
+              'or ',
               style: GoogleFonts.poppins(
-                textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),),
-            TextButton(
-                child: Text ('Join as PRO',
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, color: Colors.red[800], decoration: TextDecoration.underline),
-                  ),),
-
-              onPressed: (){},
+                textStyle:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
             ),
+            TextButton(
+              child: Text(
+                'Join as PRO',
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                      color: Colors.red[800],
+                      decoration: TextDecoration.underline),
+                ),
+              ),
+              onPressed: () {},
+            ), //Join as Pro hyperlink
           ],
-        ),
+        ), //or Text
         SECardInput(emailText, 'Email', false),
         SECardInput(passwordText, 'Password', true),
         SECardInput(firstNameText, 'First Name', false),
@@ -70,7 +80,9 @@ class SEHomePage extends StatelessWidget {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: Colors.red[800],
-                  shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0),),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0),
+                ),
               ),
               onPressed: () {},
               child: Text(
@@ -81,8 +93,25 @@ class SEHomePage extends StatelessWidget {
                     color: Colors.white),
               ),
             ),
-          ),
+          ), //Elevated Button
         ),
+        OrSeparator(),
+        Align(
+          alignment: Alignment.center,
+          child: TextButton(
+            onPressed: () {}, //redirect to signIn page
+            child: Text(
+              'Sign In',
+              style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: Colors.red[800],
+                    decoration: TextDecoration.underline),
+              ),
+            ),
+          ),
+        ), //Sign In Button
       ],
     );
   }

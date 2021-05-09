@@ -13,7 +13,7 @@ class SECardInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
+      margin: EdgeInsets.only(top: 3),
       height: 50.0,
       child: Card(
         color: Colors.white70,
@@ -22,10 +22,8 @@ class SECardInput extends StatelessWidget {
           obscureText: obscuring,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
-            focusColor: Colors.purple,
             labelText: '$textLabel',
             labelStyle: GoogleFonts.poppins(),
-            fillColor: Colors.green,
           ),
         ),
       ),
