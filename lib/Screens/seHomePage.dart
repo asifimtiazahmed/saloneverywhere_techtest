@@ -38,28 +38,33 @@ class _SEHomePageState extends State<SEHomePage> {
   final TextEditingController passwordText = TextEditingController();
   final TextEditingController firstNameText = TextEditingController();
   final TextEditingController lastNameText = TextEditingController();
-  final TextEditingController countryText = TextEditingController();
-  final TextEditingController postalCodeText = TextEditingController();
-  final TextEditingController phoneNumberText = TextEditingController();
+
+  // final TextEditingController countryText = TextEditingController();
+  // final TextEditingController postalCodeText = TextEditingController();
+  // final TextEditingController phoneNumberText = TextEditingController();
 
   // Seting up AWS Link
   void _configureAmplify() async {
-    AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
-    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
-    Amplify.addPlugins([authPlugin, analyticsPlugin]);
+    bool isConfigured = Amplify
+        .isConfigured; //This checks if the app has already alunched and configured, when routing homepage may load again, and this resolved retrying to config errors
+    if (!isConfigured) {
+      AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
+      AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+      Amplify.addPlugins([authPlugin, analyticsPlugin]);
 
-    // Once Plugins are added, configure Amplify
-    // Note: Amplify can only be configured once.
-    try {
-      await Amplify.configure(amplifyconfig);
+      // Once Plugins are added, configure Amplify
+      // Note: Amplify can only be configured once.
+      try {
+        await Amplify.configure(amplifyconfig);
 
-      setState(() {
-        _amplifyConfigured = true;
-        print('config success!');
-      });
-    } on AmplifyAlreadyConfiguredException {
-      print(
-          "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
+        setState(() {
+          _amplifyConfigured = true;
+          print('config success!');
+        });
+      } on AmplifyAlreadyConfiguredException {
+        print(
+            "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
+      }
     }
   }
 
@@ -68,19 +73,17 @@ class _SEHomePageState extends State<SEHomePage> {
     try {
       Map<String, String> userAttributes = {
         'email': emailText.text,
-        // 'firstName': firstNameText.text,
-        // 'lastName': lastNameText.text,
+        'name': firstNameText.text,
+        'family_name': lastNameText.text,
         // 'country': countryText.text,
         // 'postalCode': postalCodeText.text,
         // 'phoneNumber': phoneNumberText.text
       };
       _userData = {
         'email': emailText.text,
-        'firstName': firstNameText.text,
-        'lastName': lastNameText.text,
-        'country': countryText.text,
-        'postalCode': postalCodeText.text,
-        'phoneNumber': phoneNumberText.text
+        'password': passwordText.text,
+        'name': firstNameText.text,
+        'family_name': lastNameText.text,
       };
 
       SignUpResult res = await Amplify.Auth.signUp(
@@ -160,11 +163,9 @@ class _SEHomePageState extends State<SEHomePage> {
               labelText: 'Next',
               toPress: () {
                 userRegistration();
-                if (isSignUpComplete) {
-                  Navigator.of(context).pushReplacementNamed(
-                      '/signUpVerification',
-                      arguments: _userData);
-                }
+                Navigator.of(context).pushReplacementNamed(
+                    '/signUpVerification',
+                    arguments: _userData);
               },
             ) //Elevated Button
                 ),

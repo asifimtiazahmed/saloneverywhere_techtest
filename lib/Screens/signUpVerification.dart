@@ -1,3 +1,5 @@
+import 'package:amplify_flutter/amplify.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +19,8 @@ class VerificationPage extends StatefulWidget {
 class _VerificationPageState extends State<VerificationPage> {
   final TextEditingController verificationCodeController =
       TextEditingController();
-  bool _isEnabled; //For the button to be enabled so that we can send valid data
+  bool _isEnabled =
+      false; //For the button to be enabled so that we can send valid data
   @override
   void initState() {
     // TODO: implement initState
@@ -29,7 +32,34 @@ class _VerificationPageState extends State<VerificationPage> {
     });
   }
 
-  void sendVerification() async {}
+  void sendVerification(
+      BuildContext context, Map<String, String> data, String code) async {
+    try {
+      final res = await Amplify.Auth.confirmSignUp(
+          username: data['email'], confirmationCode: code);
+      if (res.isSignUpComplete) {
+        //Login user
+        final user = await Amplify.Auth.signIn(
+            username: data['email'], password: data['password']);
+
+        if (user.isSignedIn) {
+          Navigator.pushReplacementNamed(context, '/dashboard');
+        }
+      }
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+  }
+
+  void _resendCode(BuildContext context, Map<String, String> data) async {
+    await Amplify.Auth.resendSignUpCode(username: data['email']);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        'Confirmation code resent. Check your email',
+        style: TextStyle(color: Colors.white),
+      ),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +68,18 @@ class _VerificationPageState extends State<VerificationPage> {
         elevation: 0.0,
         backgroundColor: Colors.white,
         title: Image.asset('./Assets/salonLogo.png'),
+        actions: [
+          MaterialButton(
+              child: Icon(
+                Icons.home_outlined,
+                color: Colors.red[800],
+              ),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              })
+        ],
       ),
-      body: Column(
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -80,13 +120,23 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
               SETextButton(
                 text: 'Re-send',
-                toPress: () {},
+                toPress: () {
+                  _resendCode(context, widget.loginData);
+                },
               ),
             ],
           ),
-          SERoundButton(
-              labelText: 'Verify',
-              toPress: _isEnabled ? sendVerification : null)
+          Align(
+            alignment: Alignment.center,
+            child: SERoundButton(
+                labelText: 'Verify',
+                toPress: _isEnabled
+                    ? () {
+                        sendVerification(context, widget.loginData,
+                            verificationCodeController.text);
+                      }
+                    : null),
+          )
         ],
       ),
     );

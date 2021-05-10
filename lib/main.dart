@@ -20,8 +20,23 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         if (settings.name == '/signUpVerification') {
           return PageRouteBuilder(
-              pageBuilder: (_, __, ___) => VerificationPage(
-                  loginData: settings.arguments as Map<String, String>),
+              pageBuilder: (
+                _,
+                __,
+                ___,
+              ) =>
+                  VerificationPage(
+                      loginData: settings.arguments as Map<String, String>),
+              transitionsBuilder: (_, __, ___, child) => child);
+        }
+        if (settings.name == '/dashboard') {
+          return PageRouteBuilder(
+              pageBuilder: (
+                _,
+                __,
+                ___,
+              ) =>
+                  WelcomeNewUser(),
               transitionsBuilder: (_, __, ___, child) => child);
         }
         return MaterialPageRoute(builder: (_) => SEHomePage());
