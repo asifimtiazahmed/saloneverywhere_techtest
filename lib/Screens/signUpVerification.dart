@@ -17,6 +17,19 @@ class VerificationPage extends StatefulWidget {
 class _VerificationPageState extends State<VerificationPage> {
   final TextEditingController verificationCodeController =
       TextEditingController();
+  bool _isEnabled; //For the button to be enabled so that we can send valid data
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    verificationCodeController.addListener(() {
+      setState(() {
+        _isEnabled = verificationCodeController.text.isNotEmpty;
+      });
+    });
+  }
+
+  void sendVerification() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +84,9 @@ class _VerificationPageState extends State<VerificationPage> {
               ),
             ],
           ),
-          SERoundButton(labelText: 'Verify', toPress: () {})
+          SERoundButton(
+              labelText: 'Verify',
+              toPress: _isEnabled ? sendVerification : null)
         ],
       ),
     );
