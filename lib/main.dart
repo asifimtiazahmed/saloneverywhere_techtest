@@ -1,13 +1,20 @@
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:flutter/material.dart';
+import 'package:salon_everywhere_project/Screens/welcomeNewUser.dart';
 
 import './Screens/seHomePage.dart';
-
+import './Screens/signUpVerification.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,10 +28,9 @@ class MyApp extends StatelessWidget {
           elevation: 0.0,
           backgroundColor: Colors.white,
           title: Image.asset('./Assets/salonLogo.png'),
-
         ),
         body: SafeArea(
-          child: SEHomePage(),
+          child: WelcomeNewUser(),
         ),
       ),
     );
@@ -41,3 +47,4 @@ class MyApp extends StatelessWidget {
 //TODO: Get an android version release app
 //TODO: Get a apple version release app
 //TODO: refactor code to seperate widgets and clean code
+//TODO: Text documentation on the code

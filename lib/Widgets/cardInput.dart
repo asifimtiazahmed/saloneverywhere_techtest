@@ -14,7 +14,7 @@ class SECardInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 3),
-      height: 50.0,
+      height: 58.0,
       child: Card(
         color: Colors.white70,
         child: TextField(

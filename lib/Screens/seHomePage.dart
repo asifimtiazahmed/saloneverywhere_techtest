@@ -1,20 +1,36 @@
+//Core library
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:salon_everywhere_project/Widgets/orSeperator.dart';
 
-import '../Widgets/cardInput.dart';
+//Added libraries
+import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SEHomePage extends StatelessWidget {
-  final List<String> userRegistrationData = [
-    'email',
-    'password',
-    'firstName',
-    'lastName',
-    'country',
-    'postalCode',
-    'phoneNumber'
-  ];
+//Custom libraries
+import '../amplifyconfiguration.dart';
+import '../Widgets/orSeperator.dart';
+import '../Widgets/seRoundButton.dart';
+import '../Widgets/cardInput.dart';
+import '../Widgets/seTextButton.dart';
+
+class SEHomePage extends StatefulWidget {
+  @override
+  _SEHomePageState createState() => _SEHomePageState();
+}
+
+class _SEHomePageState extends State<SEHomePage> {
+  bool _amplifyConfigured =
+      false; //Initial check if the amplify has been configured or not
+
+  @override
+  void initState() {
+    super.initState();
+    _configureAmplify();
+  }
+
+  //Text controllers for getting the text input
   final TextEditingController emailText = TextEditingController();
   final TextEditingController passwordText = TextEditingController();
   final TextEditingController firstNameText = TextEditingController();
@@ -22,6 +38,45 @@ class SEHomePage extends StatelessWidget {
   final TextEditingController countryText = TextEditingController();
   final TextEditingController postalCodeText = TextEditingController();
   final TextEditingController phoneNumberText = TextEditingController();
+
+  void _configureAmplify() async {
+    AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
+    AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
+    Amplify.addPlugins([authPlugin, analyticsPlugin]);
+
+    // Once Plugins are added, configure Amplify
+    // Note: Amplify can only be configured once.
+    try {
+      await Amplify.configure(amplifyconfig);
+      print('config success!');
+
+      setState(() {
+        _amplifyConfigured = true;
+      });
+    } on AmplifyAlreadyConfiguredException {
+      print(
+          "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
+    }
+  }
+
+  void userRegistration() async {
+    try {
+      Map<String, String> userAttributes = {
+        'email': emailText.text,
+        'firstName': firstNameText.text,
+        'lastName': lastNameText.text,
+        'country': countryText.text,
+        'postalCode': postalCodeText.text,
+        'phoneNumber': phoneNumberText.text
+      };
+      SignUpResult res = await Amplify.Auth.signUp(
+          username: emailText.text,
+          password: passwordText.text,
+          options: CognitoSignUpOptions(userAttributes: userAttributes));
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +106,8 @@ class SEHomePage extends StatelessWidget {
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
               ),
             ),
-            TextButton(
-              child: Text(
-                'Join as PRO',
-                style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0,
-                      color: Colors.red[800],
-                      decoration: TextDecoration.underline),
-                ),
-              ),
-              onPressed: () {},
-            ), //Join as Pro hyperlink
+            SETextButton(text: 'Join as PRO', toPress: () {})
+            //Join as Pro hyperlink
           ],
         ), //or Text
         SECardInput(emailText, 'Email', false),
@@ -74,42 +118,17 @@ class SEHomePage extends StatelessWidget {
         SECardInput(postalCodeText, 'Postal Code', false),
         SECardInput(phoneNumberText, 'Phone Number', false),
         Align(
-          child: Container(
-            margin: EdgeInsets.only(top: 8.0),
-            width: 200.0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.red[800],
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0),
-                ),
-              ),
-              onPressed: () {},
-              child: Text(
-                'Submit',
-                style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25.0,
-                    color: Colors.white),
-              ),
+            child: SERoundButton(
+          labelText: 'Next',
+          toPress: () {},
+        ) //Elevated Button
             ),
-          ), //Elevated Button
-        ),
         OrSeparator(),
         Align(
           alignment: Alignment.center,
-          child: TextButton(
-            onPressed: () {}, //redirect to signIn page
-            child: Text(
-              'Sign In',
-              style: GoogleFonts.poppins(
-                textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.red[800],
-                    decoration: TextDecoration.underline),
-              ),
-            ),
+          child: SETextButton(
+            text: 'Sign In',
+            toPress: () {},
           ),
         ), //Sign In Button
       ],
