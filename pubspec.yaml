@@ -32,6 +32,7 @@ dependencies:
   amplify_flutter: '<1.0.0'
   amplify_auth_cognito: '<1.0.0'
   amplify_analytics_pinpoint: '<1.0.0'
+  webview_flutter: ^2.0.4
 
 dev_dependencies:
   flutter_test:

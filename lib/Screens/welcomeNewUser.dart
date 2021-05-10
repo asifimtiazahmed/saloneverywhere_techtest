@@ -3,6 +3,7 @@ import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:salon_everywhere_project/Screens/webView.dart';
 import 'package:salon_everywhere_project/Widgets/seRoundButton.dart';
 import '../Widgets/orSeperator.dart';
 
@@ -89,7 +90,14 @@ class _WelcomeNewUserState extends State<WelcomeNewUser> {
           OrSeparator(),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: SERoundButton(labelText: 'Dashboard', toPress: () {}),
+            child: SERoundButton(
+                labelText: 'View Some Profiles',
+                toPress: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WebViewExplorer()));
+                }),
           )
         ],
       ),

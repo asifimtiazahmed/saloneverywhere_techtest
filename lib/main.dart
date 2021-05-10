@@ -39,6 +39,16 @@ class MyApp extends StatelessWidget {
                   WelcomeNewUser(),
               transitionsBuilder: (_, __, ___, child) => child);
         }
+        if (settings.name == '/webView') {
+          return PageRouteBuilder(
+              pageBuilder: (
+                _,
+                __,
+                ___,
+              ) =>
+                  WelcomeNewUser(),
+              transitionsBuilder: (_, __, ___, child) => child);
+        }
         return MaterialPageRoute(builder: (_) => SEHomePage());
       },
     );
