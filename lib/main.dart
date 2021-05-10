@@ -9,30 +9,23 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.red[800],
-        accentColor: Colors.amber,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          title: Image.asset('./Assets/salonLogo.png'),
-        ),
-        body: SafeArea(
-          child: WelcomeNewUser(),
-        ),
-      ),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/signUpVerification') {
+          return PageRouteBuilder(
+              pageBuilder: (_, __, ___) => VerificationPage(
+                  loginData: settings.arguments as Map<String, String>),
+              transitionsBuilder: (_, __, ___, child) => child);
+        }
+        return MaterialPageRoute(builder: (_) => SEHomePage());
+      },
     );
   }
 }

@@ -14,6 +14,7 @@ import '../Widgets/orSeperator.dart';
 import '../Widgets/seRoundButton.dart';
 import '../Widgets/cardInput.dart';
 import '../Widgets/seTextButton.dart';
+import '../Screens/seSignIn.dart';
 
 class SEHomePage extends StatefulWidget {
   @override
@@ -23,6 +24,8 @@ class SEHomePage extends StatefulWidget {
 class _SEHomePageState extends State<SEHomePage> {
   bool _amplifyConfigured =
       false; //Initial check if the amplify has been configured or not
+  bool isSignUpComplete = false;
+  Map<String, String> _userData;
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _SEHomePageState extends State<SEHomePage> {
   final TextEditingController postalCodeText = TextEditingController();
   final TextEditingController phoneNumberText = TextEditingController();
 
+  // Seting up AWS Link
   void _configureAmplify() async {
     AmplifyAnalyticsPinpoint analyticsPlugin = AmplifyAnalyticsPinpoint();
     AmplifyAuthCognito authPlugin = AmplifyAuthCognito();
@@ -48,10 +52,10 @@ class _SEHomePageState extends State<SEHomePage> {
     // Note: Amplify can only be configured once.
     try {
       await Amplify.configure(amplifyconfig);
-      print('config success!');
 
       setState(() {
         _amplifyConfigured = true;
+        print('config success!');
       });
     } on AmplifyAlreadyConfiguredException {
       print(
@@ -59,9 +63,18 @@ class _SEHomePageState extends State<SEHomePage> {
     }
   }
 
+//Registering a new user
   void userRegistration() async {
     try {
       Map<String, String> userAttributes = {
+        'email': emailText.text,
+        // 'firstName': firstNameText.text,
+        // 'lastName': lastNameText.text,
+        // 'country': countryText.text,
+        // 'postalCode': postalCodeText.text,
+        // 'phoneNumber': phoneNumberText.text
+      };
+      _userData = {
         'email': emailText.text,
         'firstName': firstNameText.text,
         'lastName': lastNameText.text,
@@ -69,69 +82,103 @@ class _SEHomePageState extends State<SEHomePage> {
         'postalCode': postalCodeText.text,
         'phoneNumber': phoneNumberText.text
       };
+
       SignUpResult res = await Amplify.Auth.signUp(
-          username: emailText.text,
-          password: passwordText.text,
-          options: CognitoSignUpOptions(userAttributes: userAttributes));
+        username: emailText.text,
+        password: passwordText.text,
+        options: CognitoSignUpOptions(userAttributes: userAttributes),
+      );
+      setState(() {
+        isSignUpComplete = res.isSignUpComplete;
+        print(userAttributes.entries);
+        print('signUp success!');
+      });
     } on AuthException catch (e) {
       print(e.message);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.message,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red[800],
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.vertical,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Join as Guest',
-              style: GoogleFonts.poppins(
-                textStyle:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-            ),
-          ),
-        ), //Join as Guest Text
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        title: Image.asset('./Assets/salonLogo.png'),
+      ),
+      body: SafeArea(
+        child: ListView(
+          scrollDirection: Axis.vertical,
           children: [
-            Text(
-              'or ',
-              style: GoogleFonts.poppins(
-                textStyle:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Join as Guest',
+                  style: GoogleFonts.poppins(
+                    textStyle:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                ),
               ),
-            ),
-            SETextButton(text: 'Join as PRO', toPress: () {})
-            //Join as Pro hyperlink
+            ), //Join as Guest Text
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'or ',
+                  style: GoogleFonts.poppins(
+                    textStyle:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  ),
+                ),
+                SETextButton(text: 'Join as PRO', toPress: () {})
+                //Join as Pro hyperlink
+              ],
+            ), //or Text
+            SECardInput(emailText, 'Email', false),
+            SECardInput(passwordText, 'Password', true),
+            SECardInput(firstNameText, 'First Name', false),
+            SECardInput(lastNameText, 'Last Name', false),
+            SECardInput(countryText, 'Country', false),
+            SECardInput(postalCodeText, 'Postal Code', false),
+            SECardInput(phoneNumberText, 'Phone Number', false),
+            Align(
+                child: SERoundButton(
+              labelText: 'Next',
+              toPress: () {
+                userRegistration();
+                if (isSignUpComplete) {
+                  Navigator.of(context).pushReplacementNamed(
+                      '/signUpVerification',
+                      arguments: _userData);
+                }
+              },
+            ) //Elevated Button
+                ),
+            OrSeparator(),
+            Align(
+              alignment: Alignment.center,
+              child: SETextButton(
+                  text: 'Sign In',
+                  toPress: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SignInPage()));
+                  }),
+            ), //Sign In Button
           ],
-        ), //or Text
-        SECardInput(emailText, 'Email', false),
-        SECardInput(passwordText, 'Password', true),
-        SECardInput(firstNameText, 'First Name', false),
-        SECardInput(lastNameText, 'Last Name', false),
-        SECardInput(countryText, 'Country', false),
-        SECardInput(postalCodeText, 'Postal Code', false),
-        SECardInput(phoneNumberText, 'Phone Number', false),
-        Align(
-            child: SERoundButton(
-          labelText: 'Next',
-          toPress: () {},
-        ) //Elevated Button
-            ),
-        OrSeparator(),
-        Align(
-          alignment: Alignment.center,
-          child: SETextButton(
-            text: 'Sign In',
-            toPress: () {},
-          ),
-        ), //Sign In Button
-      ],
+        ),
+      ),
     );
   }
 }
