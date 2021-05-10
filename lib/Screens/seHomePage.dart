@@ -107,18 +107,6 @@ class _SEHomePageState extends State<SEHomePage> {
     }
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    // emailText.dispose();
-    // passwordText.dispose();
-    // firstNameText.dispose();
-    // lastNameText.dispose();
-    // countryText.dispose();
-    // postalCodeText.dispose();
-    // phoneNumberText.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,38 +132,40 @@ class _SEHomePageState extends State<SEHomePage> {
                   ),
                 ),
               ),
-            ), //Join as Guest Text
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'or ',
-                  style: GoogleFonts.poppins(
-                    textStyle:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                  ),
-                ),
-                SETextButton(text: 'Join as PRO', toPress: () {})
-                //Join as Pro hyperlink
-              ],
-            ), //or Text
+            ),
+            //Join as Guest Text
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Text(
+            //       'or ',
+            //       style: GoogleFonts.poppins(
+            //         textStyle:
+            //             TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            //       ),
+            //     ),
+            //     SETextButton(text: 'Join as PRO', toPress: () {})
+            //     //Join as Pro hyperlink
+            //   ],
+            // ), //or Text
             SECardInput(emailText, 'Email', false),
             SECardInput(passwordText, 'Password', true),
             SECardInput(firstNameText, 'First Name', false),
             SECardInput(lastNameText, 'Last Name', false),
-            SECardInput(countryText, 'Country', false),
-            SECardInput(postalCodeText, 'Postal Code', false),
-            SECardInput(phoneNumberText, 'Phone Number', false),
+            // SECardInput(countryText, 'Country', false),
+            // SECardInput(postalCodeText, 'Postal Code', false),
+            // SECardInput(phoneNumberText, 'Phone Number', false),
             Align(
                 child: SERoundButton(
               labelText: 'Next',
               toPress: () {
                 userRegistration();
+                if (isSignUpComplete) {
                   Navigator.of(context).pushReplacementNamed(
                       '/signUpVerification',
                       arguments: _userData);
                 }
-  }
+              },
             ) //Elevated Button
                 ),
             OrSeparator(),
