@@ -111,13 +111,13 @@ class _SEHomePageState extends State<SEHomePage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    emailText.dispose();
-    passwordText.dispose();
-    firstNameText.dispose();
-    lastNameText.dispose();
-    countryText.dispose();
-    postalCodeText.dispose();
-    phoneNumberText.dispose();
+    // emailText.dispose();
+    // passwordText.dispose();
+    // firstNameText.dispose();
+    // lastNameText.dispose();
+    // countryText.dispose();
+    // postalCodeText.dispose();
+    // phoneNumberText.dispose();
   }
 
   @override
@@ -171,12 +171,11 @@ class _SEHomePageState extends State<SEHomePage> {
               labelText: 'Next',
               toPress: () {
                 userRegistration();
-                if (isSignUpComplete) {
                   Navigator.of(context).pushReplacementNamed(
                       '/signUpVerification',
                       arguments: _userData);
                 }
-              },
+  }
             ) //Elevated Button
                 ),
             OrSeparator(),
