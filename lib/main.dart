@@ -1,6 +1,5 @@
-import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:salon_everywhere_project/Screens/welcomeNewUser.dart';
+import './Screens/welcomeNewUser.dart';
 
 import './Screens/seHomePage.dart';
 import './Screens/signUpVerification.dart';

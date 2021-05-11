@@ -1,4 +1,4 @@
-name: salon_everywhere_project
+name: SalonEverywhere
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -33,6 +33,7 @@ dependencies:
   amplify_auth_cognito: '<1.0.0'
   amplify_analytics_pinpoint: '<1.0.0'
   webview_flutter: ^2.0.4
+  image_picker: ^0.7.4
 
 dev_dependencies:
   flutter_test:

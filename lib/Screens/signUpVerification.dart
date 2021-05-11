@@ -3,8 +3,8 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:salon_everywhere_project/Widgets/seRoundButton.dart';
-import 'package:salon_everywhere_project/Widgets/seTextButton.dart';
+import '../Widgets/seRoundButton.dart';
+import '../Widgets/seTextButton.dart';
 import '../Widgets/cardInput.dart';
 
 class VerificationPage extends StatefulWidget {
@@ -35,6 +35,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void sendVerification(
       BuildContext context, Map<String, String> data, String code) async {
     try {
+      await Amplify.Auth.signOut(); //signout then verify and login
       final res = await Amplify.Auth.confirmSignUp(
           username: data['email'], confirmationCode: code);
       if (res.isSignUpComplete) {
@@ -60,6 +61,12 @@ class _VerificationPageState extends State<VerificationPage> {
       ),
     ));
   }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   verificationCodeController.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

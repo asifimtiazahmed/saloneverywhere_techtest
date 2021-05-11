@@ -5,8 +5,13 @@ class SERoundButton extends StatelessWidget {
   final double width;
   final String labelText;
   final Function toPress;
+  final double textSize;
 
-  SERoundButton({this.width, @required this.labelText, @required this.toPress});
+  SERoundButton(
+      {this.width,
+      @required this.labelText,
+      @required this.toPress,
+      this.textSize});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,7 @@ class SERoundButton extends StatelessWidget {
           '$labelText',
           style: GoogleFonts.poppins(
               //fontWeight: FontWeight.bold,
-              fontSize: 25.0,
+              fontSize: textSize ?? 25.0,
               color: Colors.white),
         ),
       ),

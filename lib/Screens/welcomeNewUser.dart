@@ -1,10 +1,12 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:salon_everywhere_project/Screens/webView.dart';
-import 'package:salon_everywhere_project/Widgets/seRoundButton.dart';
+import 'package:image_picker/image_picker.dart';
+import '../Screens/webView.dart';
+import '../Widgets/seRoundButton.dart';
 import '../Widgets/orSeperator.dart';
 
 class WelcomeNewUser extends StatefulWidget {
@@ -15,6 +17,19 @@ class WelcomeNewUser extends StatefulWidget {
 class _WelcomeNewUserState extends State<WelcomeNewUser> {
   AuthUser _user;
   var _userAttributes;
+  File _image;
+  final picker = ImagePicker();
+
+  Future getImage(ImageSource srcSelect) async {
+    final pickedImage = await picker.getImage(source: srcSelect);
+    setState(() {
+      if (pickedImage != null) {
+        _image = File(pickedImage.path);
+      } else {
+        print('No image Selected');
+      }
+    });
+  }
 
   //String userName = 'Jason Goncalves';
   @override
@@ -56,17 +71,20 @@ class _WelcomeNewUserState extends State<WelcomeNewUser> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 10),
-            child: (_user == null)
-                ? Text('Loading...')
-                : Text(
-                    'Welcome, ${_user.username}!',
-                    style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
-                        color: Colors.red[800]),
-                  ),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 10),
+              child: (_user == null)
+                  ? Text('Loading...')
+                  : Text(
+                      'Welcome, ${_user.username}!',
+                      style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20.0,
+                          color: Colors.red[800]),
+                    ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -79,25 +97,60 @@ class _WelcomeNewUserState extends State<WelcomeNewUser> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: SERoundButton(
-              labelText: 'Upload Profile Pic',
-              toPress: () {},
-              width: 300,
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200.0,
+            child: Center(
+              child: _image == null
+                  ? Text('No image Selected')
+                  : Image.file(_image),
             ),
           ),
-          OrSeparator(),
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: SERoundButton(
-                labelText: 'View Some Profiles',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SERoundButton(
+                labelText: 'Camera',
                 toPress: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WebViewExplorer()));
-                }),
+                  getImage(ImageSource.camera);
+                },
+                textSize: 15.0,
+                width: 100,
+              ),
+              SERoundButton(
+                labelText: 'Gallery',
+                toPress: () {
+                  getImage(ImageSource.gallery);
+                },
+                textSize: 15.0,
+                width: 100,
+              ),
+            ],
+          ),
+
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          //   child: SERoundButton(
+          //     labelText: 'Upload Profile Pic',
+          //     toPress: () {},
+          //     width: 300,
+          //   ),
+          // ),
+          OrSeparator(),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: SERoundButton(
+                  width: 280,
+                  labelText: 'View Some Profiles',
+                  toPress: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WebViewExplorer()));
+                  }),
+            ),
           )
         ],
       ),

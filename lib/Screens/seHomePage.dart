@@ -27,13 +27,50 @@ class _SEHomePageState extends State<SEHomePage> {
   bool isSignUpComplete = false;
   Map<String, String> _userData;
 
+  //bool emailOK, passOK, fNameOK, lNameOK = false;
+  //bool buttonEnable = false;
+
   @override
   void initState() {
     super.initState();
     _configureAmplify();
+    //checkEmptyControllers();
   }
 
-  //Text controllers for getting the text input
+  // void enableNextButton(){
+  //   if(emailOK && passOK && fNameOK && lNameOK) buttonEnable = true;
+  // }
+  //
+  // void checkEmptyControllers(){ //This method will be called by initState to listen for updates to the text fiends, and then enable the submit button
+  //   emailText.addListener(() {
+  //     setState(() {
+  //       emailText.text.isNotEmpty ? emailOK = true : emailOK = false;
+  //       enableNextButton();
+  //     });
+  //   });
+  //   passwordText.addListener(() {
+  //     setState(() {
+  //       passwordText.text.isNotEmpty ? passOK = true : passOK = false;
+  //       enableNextButton();
+  //     });
+  //   });
+  //   firstNameText.addListener(() {
+  //     setState(() {
+  //       fNameOK = firstNameText.text.isNotEmpty;
+  //       enableNextButton();
+  //     });
+  //   });
+  //   lastNameText.addListener(() {
+  //     setState(() {
+  //       lNameOK = lastNameText.text.isNotEmpty;
+  //       enableNextButton();
+  //     });
+  //   });
+  //
+  // }
+
+  //Text controllers for getting the text input //This was a trial for the checkE
+
   final TextEditingController emailText = TextEditingController();
   final TextEditingController passwordText = TextEditingController();
   final TextEditingController firstNameText = TextEditingController();
@@ -44,6 +81,7 @@ class _SEHomePageState extends State<SEHomePage> {
   // final TextEditingController phoneNumberText = TextEditingController();
 
   // Seting up AWS Link
+
   void _configureAmplify() async {
     bool isConfigured = Amplify
         .isConfigured; //This checks if the app has already alunched and configured, when routing homepage may load again, and this resolved retrying to config errors
@@ -54,6 +92,7 @@ class _SEHomePageState extends State<SEHomePage> {
 
       // Once Plugins are added, configure Amplify
       // Note: Amplify can only be configured once.
+
       try {
         await Amplify.configure(amplifyconfig);
 
@@ -110,6 +149,14 @@ class _SEHomePageState extends State<SEHomePage> {
     }
   }
 
+  @override
+  void dispose() {
+    emailText.dispose();
+    passwordText.dispose();
+    firstNameText.dispose();
+    lastNameText.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +202,22 @@ class _SEHomePageState extends State<SEHomePage> {
             SECardInput(passwordText, 'Password', true),
             SECardInput(firstNameText, 'First Name', false),
             SECardInput(lastNameText, 'Last Name', false),
+            Text(
+              '*All fields are required to proceed to register',
+              style: GoogleFonts.poppins(
+                textStyle: TextStyle(
+                  //fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
             // SECardInput(countryText, 'Country', false),
             // SECardInput(postalCodeText, 'Postal Code', false),
             // SECardInput(phoneNumberText, 'Phone Number', false),
             Align(
                 child: SERoundButton(
-              labelText: 'Next',
+              labelText: 'Register',
               toPress: () {
                 userRegistration();
                 Navigator.of(context).pushReplacementNamed(
