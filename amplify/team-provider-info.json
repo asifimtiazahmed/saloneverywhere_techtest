@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-saloneverywhereproje-dev-180629-authRole",
+      "UnauthRoleArn": "arn:aws:iam::611023585049:role/amplify-saloneverywhereproje-dev-180629-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::611023585049:role/amplify-saloneverywhereproje-dev-180629-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-saloneverywhereproje-dev-180629-deployment",
+      "UnauthRoleName": "amplify-saloneverywhereproje-dev-180629-unauthRole",
+      "StackName": "amplify-saloneverywhereproje-dev-180629",
+      "StackId": "arn:aws:cloudformation:eu-central-1:611023585049:stack/amplify-saloneverywhereproje-dev-180629/d1134200-b112-11eb-bbb3-06efe8cf63d4",
+      "AmplifyAppId": "d7oowtxiugt47"
+    },
+    "categories": {
+      "auth": {
+        "saloneverywhereproje0270164f": {}
+      }
+    }
+  }
+}
