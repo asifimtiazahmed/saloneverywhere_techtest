@@ -2,8 +2,8 @@
     package="com.aadnsdiy.salon_everywhere_project">
    <application
        android:requestLegacyExternalStorage="true"
-       android:label="salon_everywhere_project"
-        android:icon="@mipmap/ic_launcher">
+       android:label="SalonEverywhere"
+       android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
